@@ -1,0 +1,30 @@
+- Ficheiro .map
+
+nº cidades (N)  nº ligações (L)
+cidade1 cidade2 meio_transporte duração custo ti  tf  p
+... L linhas
+
+ti = 1º transporte do dia, tf = último transporte do dia, p= periodicidade diária
+
+-------------------------------------------------------------------------------------------------------
+- Ficheiro .cli
+
+nº clientes (C)
+Id_cliente  cidade1 cidade2 tv  critério_optimização  nº limitações
+... C linhas
+
+tv = minuto a partir do qual o cliente pode viajar
+Se nº limitações > 0, A# e/ou B# seguido de respectiva limitação
+A1 = limitação do meio de transporte, A2 = máx. duração de uma ligação, A3 = máx. custo de uma ligação
+B1 = máx. duração total, B2 = máx. custo total
+
+-------------------------------------------------------------------------------------------------------
+- Ficheiro .sol
+
+Id_cliente  cidade1 meio_transporte cidade2 (...) duração_total custo_total
+... C linhas
+
+duração_total = minuto de chegada final - tv
+custo_total = somatório dos custos de todas as ligações usadas
+
+Se a viagem não for possível, imprime-se no ficheiro de solução: Id_cliente -1
