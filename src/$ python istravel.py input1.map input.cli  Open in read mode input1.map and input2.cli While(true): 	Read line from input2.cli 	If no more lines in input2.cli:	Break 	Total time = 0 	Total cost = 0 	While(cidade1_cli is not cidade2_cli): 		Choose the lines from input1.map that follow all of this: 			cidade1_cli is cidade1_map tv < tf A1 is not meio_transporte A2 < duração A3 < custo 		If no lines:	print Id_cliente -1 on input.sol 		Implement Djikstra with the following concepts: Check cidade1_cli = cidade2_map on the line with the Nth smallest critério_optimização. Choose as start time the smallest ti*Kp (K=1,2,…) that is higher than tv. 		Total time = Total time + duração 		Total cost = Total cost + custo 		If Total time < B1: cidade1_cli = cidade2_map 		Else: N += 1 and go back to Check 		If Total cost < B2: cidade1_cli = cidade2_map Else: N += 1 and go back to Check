@@ -1,0 +1,24 @@
+$ python istravel.py input1.map input.cli
+
+Open in read mode input1.map and input2.cli
+While(true):
+	Read line from input2.cli
+	If no more lines in input2.cli:	Break
+	Total time = 0
+	Total cost = 0
+	While(cidade1_cli is not cidade2_cli):
+		Choose the lines from input1.map that follow all of this:
+			cidade1_cli is cidade1_map
+      tv < tf
+      A1 is not meio_transporte
+      A2 < duração
+      A3 < custo
+		If no lines:	print Id_cliente -1 on input.sol
+		Implement Djikstra with the following concepts:
+      Check cidade1_cli = cidade2_map on the line with the Nth smallest critério_optimização. Choose as start time the smallest ti*Kp (K=1,2,…) that is higher than tv.
+		  Total time = Total time + duração
+		  Total cost = Total cost + custo
+		  If Total time < B1: cidade1_cli = cidade2_map
+		  Else: N += 1 and go back to Check
+		  If Total cost < B2: cidade1_cli = cidade2_map
+      Else: N += 1 and go back to Check
