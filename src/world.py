@@ -1,3 +1,32 @@
+
+
+class Timetable:
+    """
+    Class that describes the schedule for a specific trip.
+    """
+
+
+    def __init__(self, ti, tf, p):
+        self.table = []
+        i = 0
+        while ti + i * p <= tf:
+            self.table.append(ti + i * p)
+            i += 1
+
+    def next_trip(self, time):
+        i = 0
+        while i < len(self.table):
+            if time <= self.table[i]:
+                return (0, self.table[i])
+            i += 1
+        return (1, self.table[0])
+
+    def __str__(self):
+        res = '( '
+        for x in self.table:
+            res += str(x) + ' '
+        return res + ')'
+
 class Trip:
     """
     This class defines the structure of a trip in a graph accordingly to the following arguments:
@@ -11,14 +40,12 @@ class Trip:
         8) period of the trip
     """
 
-    def __init__(self,dest,ty,dur,c,ti,tf,p):
+    def __init__(self, dest, ty, dur, c, ti, tf, p):
         self.__destination = dest
         self.__type = ty
         self.__duration = dur
         self.__cost = c
-        self.__timeinit = ti
-        self.__timefinal = tf
-        self.__periodicity = p
+        self.__schedule = Timetable(int(ti), int(tf), int(p))
 
     def destination(self):
         return self.__destination
@@ -32,17 +59,13 @@ class Trip:
     def cost(self):
         return self.__cost
 
-    def init_time(self):
-        return self.__timeinit
-
-    def final_time(self):
-        return self.__timefinal
-
-    def period(self):
-        return self.__periodicity
+    def schedule(self):
+        return self.__schedule
 
     def __str__(self):
-        return self.__destination + ' ' + self.__type + ' ' + self.__duration + ' ' + self.__cost + ' ' + self.__timeinit + ' ' + self.__timefinal + ' ' + self.__periodicity
+        res = self.__destination + ' ' + self.__type + ' ' + self.__duration + ' ' + self.__cost + ' ' + str(self.__schedule)
+        return res
+
 
 class World:
     """
@@ -52,7 +75,7 @@ class World:
     def __init__(self):
         self.__graph = {}
 
-    def from_file(self,path):
+    def from_file(self, path):
         # this method loads a file into a object of this class.
         with open(path) as file:
             # from now on treat object as variable file.
@@ -113,3 +136,8 @@ for trip in earth.trips_from(9,set(['comboio'])):
 print("\n>> test 4\n")
 for trip in earth.trips_from(9,set(['comboio','barco'])):
     print(trip)
+
+print("\n>> test 5\n")
+scdl = Timetable(0, 1000, 200)
+print(scdl)
+print(scdl.next_trip(1001))
