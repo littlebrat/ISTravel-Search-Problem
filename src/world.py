@@ -1,4 +1,15 @@
 class Trip:
+    """
+    This class defines the structure of a trip in a graph accordingly to the following arguments:
+        1) departure city
+        2) arrival city
+        3) type of transport
+        4) duration of the trip
+        5) cost of the trip
+        6) opening minute of the trip
+        7) last trip of the day minute
+        8) period of the trip
+    """
 
     def __init__(self,dest,ty,dur,c,ti,tf,p):
         self.__destination = dest
@@ -9,21 +20,96 @@ class Trip:
         self.__timefinal = tf
         self.__periodicity = p
 
+    def destination(self):
+        return self.__destination
 
+    def type(self):
+        return self.__type
+
+    def duration(self):
+        return self.__duration
+
+    def cost(self):
+        return self.__cost
+
+    def init_time(self):
+        return self.__timeinit
+
+    def final_time(self):
+        return self.__timefinal
+
+    def period(self):
+        return self.__periodicity
+
+    def __str__(self):
+        return self.__destination + ' ' + self.__type + ' ' + self.__duration + ' ' + self.__cost + ' ' + self.__timeinit + ' ' + self.__timefinal + ' ' + self.__periodicity
 
 class World:
+    """
+    This class defines the world for the search problem on a graph like structure - a dictionary
+    """
 
     def __init__(self):
         self.__graph = {}
 
     def from_file(self,path):
+        # this method loads a file into a object of this class.
         with open(path) as file:
+            # from now on treat object as variable file.
             for line in file:
+                # for each line in the file verify if the structure of the line is correct.
                 words = line.split()
                 if len(words) is 2:
-
+                    # if we are on the first line of the file, declare the structure of the dictionary.
+                    cities = int(words[0])
+                    for x in range(1,cities):
+                        self.__graph[x] = []
+                elif len(words) is 8:
+                    # if we are on another line of the file with 8 words add edge to the graph. Graph is symmetrical so we add one edge to the inverse connection.
+                    aux = Trip(words[1],words[2],words[3],words[4],words[5],words[6],words[7])
+                    self.__graph[int(words[0])].append(aux)
+                    auxreturn = Trip(words[0],words[2],words[3],words[4],words[5],words[6],words[7])
+                    self.__graph[int(words[1])].append(auxreturn)
                 else:
-                    if words[0] is '*':
-                        self.root.set_next_hop(words[1])
-                    else:
-                        self.insert(words[0],words[1])
+                    # return an exception if we don't find the expected number of words in a line.
+                    return Exception('Wrong file format.')
+
+    def trips_from(self,city,type_set = None):
+        # receives a current city and an optional argument referring to the possible means of transportation (this argument has a structure of a set)
+        trips = self.__graph[city]
+        # if there is no preference return all edges.
+        if type_set is None:
+            return trips
+        # otherwise check for all the possible edges.
+        else:
+            res = []
+            for t in trips:
+                if t.type() in type_set:
+                    res.append(t)
+            return res
+
+    def __str__(self):
+        res = ''
+        for key in sorted(self.__graph.keys()):
+            res += 'NODE: ' + str(key) + ': \n'
+            for trip in self.__graph[key]:
+                res += trip.__str__() + '\n'
+        return res
+
+# testing
+earth = World()
+earth.from_file('map_files/test_0.map')
+print("\n>> test 1\n")
+print(earth)
+
+print("\n>> test 2\n")
+for trip in earth.trips_from(9):
+    print(trip)
+
+print("\n>> test 3\n")
+for trip in earth.trips_from(9,set(['comboio'])):
+    print(trip)
+
+print("\n>> test 4\n")
+for trip in earth.trips_from(9,set(['comboio','barco'])):
+    print(trip)
