@@ -1,10 +1,10 @@
+import math
 
 
 class Timetable:
     """
     Class that describes the schedule for a specific trip.
     """
-
 
     def __init__(self, ti, tf, p):
         self.table = []
@@ -17,15 +17,16 @@ class Timetable:
         i = 0
         while i < len(self.table):
             if time <= self.table[i]:
-                return (0, self.table[i])
+                return [0, self.table[i]]
             i += 1
-        return (1, self.table[0])
+        return [1, self.table[0]]
 
     def __str__(self):
         res = '( '
         for x in self.table:
             res += str(x) + ' '
         return res + ')'
+
 
 class Trip:
     """
@@ -97,19 +98,22 @@ class World:
                     # return an exception if we don't find the expected number of words in a line.
                     return Exception('Wrong file format.')
 
-    def trips_from(self,city,type_set = None):
-        # receives a current city and an optional argument referring to the possible means of transportation (this argument has a structure of a set)
+    def trips_from(self, city, type_set = None, max_cost = None, max_dur = None):
+        # receives a current city and an optional argument referring to the impossible means
+        #  of transportation (this argument has a structure of a set)
         trips = self.__graph[city]
         # if there is no preference return all edges.
         if type_set is None:
-            return trips
-        # otherwise check for all the possible edges.
-        else:
-            res = []
-            for t in trips:
-                if t.type() in type_set:
-                    res.append(t)
-            return res
+            type_set = ''
+        if max_cost is None:
+            max_cost = math.inf
+        if max_dur is None:
+            max_dur = math.inf
+        res = []
+        for t in trips:
+            if t.type() != type_set and max_cost >= int(t.cost()) and max_dur >= int(t.duration()):
+                res.append(t)
+        return res
 
     def __str__(self):
         res = ''
@@ -126,18 +130,26 @@ print("\n>> test 1\n")
 print(earth)
 
 print("\n>> test 2\n")
-for trip in earth.trips_from(9):
+list2 = earth.trips_from(9)
+for trip in list2:
     print(trip)
 
 print("\n>> test 3\n")
-for trip in earth.trips_from(9,set(['comboio'])):
+list3 = earth.trips_from(9,'comboio')
+for trip in list3:
     print(trip)
 
 print("\n>> test 4\n")
-for trip in earth.trips_from(9,set(['comboio','barco'])):
+list3 = earth.trips_from(9,'comboio',8)
+for trip in list3:
     print(trip)
 
 print("\n>> test 5\n")
+list3 = earth.trips_from(9,'comboio',None,25)
+for trip in list3:
+    print(trip)
+
+print("\n>> test 6\n")
 scdl = Timetable(0, 1000, 200)
 print(scdl)
 print(scdl.next_trip(1001))

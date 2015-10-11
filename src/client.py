@@ -1,7 +1,30 @@
 import math
 
+class State:
 
-class Problem:
+    def __init__(self, fr, to, transport, timestamp, trip_cost):
+        self.__before = fr
+        self.__now = to
+        self.__transport = transport
+        self.__time_available = timestamp
+        self.__cost = trip_cost
+
+    def transport(self):
+        return self.__transport
+
+    def departs(self):
+        return self.__before
+
+    def arrives(self):
+        return self.__now
+
+    def available(self):
+        return self.__time_available
+
+    def cost(self):
+        return self.__cost
+
+class Problem():
 
     def __init__(self, idn, start, goal, available, criteria):
         self.client_id = idn
@@ -35,6 +58,46 @@ class Problem:
                             'A3': self.set_max_ride_cost, 'B1': self.set_max_plan_dur,
                             'B2': self.set_max_plan_cost}
         restriction_list[key](value)
+
+    def getStartState(self):
+        """
+        Returns the start state for the search problem.
+        """
+        return State(math.inf, self.start_node, None, [math.floor(self.available_time / 1440),self.available_time % 1440], 0)
+
+
+    def isGoalState(self, state):
+        """
+        Returns True if and only if the state is a valid goal state.
+        """
+        if state.arrives() is self.goal_node:
+            return True
+        else:
+            return False
+
+    def getSuccessors(self, state):
+        """
+        For a given state, this should return a list of triples, (successor,
+        action, stepCost), where 'successor' is a successor to the current
+        state, 'action' is the action required to get there, and 'stepCost' is
+        the incremental cost of expanding to that successor.
+        """
+        return
+
+    def getCostOfActions(self, actions):
+        """
+        This method returns the total cost of a particular sequence of actions.
+        """
+        res = 0
+        for s in actions:
+            res += s.cost()
+        return res
+
+    def getPlanDuration(self, actions):
+        """
+        This method returns the duration of the plan
+        """
+        return actions[-1].available()
 
     def __str__(self):
         res = "{id: " + str(self.client_id) + ', start: ' + str(self.start_node) + ', goal: ' \
@@ -73,6 +136,11 @@ class Pawns:
                 else:
                     # return an exception if we don't find the expected number of words in a line.
                     return Exception('Wrong file format.')
+        if clients_req is not len(self.clients):
+            return Exception('Wrong file format.')
+
+    def set_world(self,w):
+        self.world = w
 
     def __str__(self):
         res = ''
