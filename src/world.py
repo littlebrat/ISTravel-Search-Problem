@@ -65,8 +65,9 @@ class Trip:
 
     def next_available_time(self, time):
         next_trip = self.__schedule.next_trip(time)
-        duration = [math.floor(self.__duration / 1440),self.__duration % 1440]
-        return next_trip + duration
+        minutes = (next_trip[1]+ int(self.__duration)) % 1440
+        days = next_trip[0] + math.floor((int(self.__duration)+next_trip[1]) / 1440)
+        return [days,minutes]
 
     def __str__(self):
         res = self.__destination + ' ' + self.__type + ' ' + self.__duration + ' ' + self.__cost + ' ' + str(self.__schedule)

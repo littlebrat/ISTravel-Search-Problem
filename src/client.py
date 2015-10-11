@@ -18,6 +18,9 @@ class Problem():
         self.maximum_plan_duration = math.inf
         self.world = world
 
+    def client_id(self):
+        return self.client_id
+
     def set_unwanted_ride(self, ride):
         self.unwanted_ride = ride
 
@@ -50,7 +53,7 @@ class Problem():
         """
         Returns True if and only if the state is a valid goal state.
         """
-        if state.arrives() is self.goal_node:
+        if int(state.arrives()) == int(self.goal_node):
             return True
         else:
             return False
@@ -65,7 +68,7 @@ class Problem():
         trips = self.world.trips_from(state.arrives(), self.unwanted_ride, self.maximum_ride_cost, self.maximum_ride_duration)
         actions = []
         for t in trips:
-            aux = State(state.arrives(), t.destination(), t.type(), t.next_trip_time(state.available()), t.cost())
+            aux = State(state.arrives(), t.destination(), t.type(), t.next_available_time(state.available()), t.cost())
             actions.append(aux)
         return actions
 
@@ -73,16 +76,27 @@ class Problem():
         """
         This method returns the total cost of a particular sequence of actions.
         """
-        res = 0
-        for s in actions:
-            res += s.cost()
-        return res
+        if self.optimization_criteria == 'tempo':
+            return self.getPlanDuration(actions)
+        elif self.optimization_criteria == 'custo':
+            return self.getPlanCost(actions)
+        else:
+            return Exception('INVALID OPTIMIZATION CRITERIA')
 
     def getPlanDuration(self, actions):
         """
         This method returns the duration of the plan
         """
         return actions[-1].available()
+
+    def getPlanCost(self,actions):
+        """
+        This method returns the total cost of a particular sequence of actions.
+        """
+        res = 0
+        for s in actions:
+            res += s.cost()
+        return res
 
     def __str__(self):
         res = "{id: " + str(self.client_id) + ', start: ' + str(self.start_node) + ', goal: ' \
@@ -100,6 +114,18 @@ class Pawns:
     def __init__(self, world):
         self.clients = []
         self.world = world
+        self.index = 0
+
+    def __iter__(self):
+         return self
+
+    def __next__(self):
+         try:
+             result = self.clients[self.index]
+         except IndexError:
+             raise StopIteration
+         self.index += 1
+         return result
 
     def from_file(self, path):
         with open(path) as file:

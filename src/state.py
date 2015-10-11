@@ -21,3 +21,8 @@ class State:
 
     def cost(self):
         return self.__cost
+
+    def __str__(self):
+        return 'from: ' + str(self.__before) + ', to: ' + str(self.__now) \
+               + ', transport:  ' + str(self.__transport) + ', available at: ' \
+               + str(self.__time_available) + ', cost: ' + str(self.__cost)
