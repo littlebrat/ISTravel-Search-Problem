@@ -1,32 +1,11 @@
+from src.state import State
+from src.world import Trip
 import math
 
-class State:
-
-    def __init__(self, fr, to, transport, timestamp, trip_cost):
-        self.__before = fr
-        self.__now = to
-        self.__transport = transport
-        self.__time_available = timestamp
-        self.__cost = trip_cost
-
-    def transport(self):
-        return self.__transport
-
-    def departs(self):
-        return self.__before
-
-    def arrives(self):
-        return self.__now
-
-    def available(self):
-        return self.__time_available
-
-    def cost(self):
-        return self.__cost
 
 class Problem():
 
-    def __init__(self, idn, start, goal, available, criteria):
+    def __init__(self, idn, start, goal, available, criteria, world):
         self.client_id = idn
         self.start_node = start
         self.goal_node = goal
@@ -37,6 +16,7 @@ class Problem():
         self.maximum_ride_duration = math.inf
         self.maximum_plan_cost = math.inf
         self.maximum_plan_duration = math.inf
+        self.world = world
 
     def set_unwanted_ride(self, ride):
         self.unwanted_ride = ride
@@ -82,7 +62,12 @@ class Problem():
         state, 'action' is the action required to get there, and 'stepCost' is
         the incremental cost of expanding to that successor.
         """
-        return
+        trips = self.world.trips_from(state.arrives(), self.unwanted_ride, self.maximum_ride_cost, self.maximum_ride_duration)
+        actions = []
+        for t in trips:
+            aux = State(state.arrives(), t.destination(), t.type(), t.next_trip_time(state.available()), t.cost())
+            actions.append(aux)
+        return actions
 
     def getCostOfActions(self, actions):
         """
@@ -112,8 +97,9 @@ class Problem():
 
 class Pawns:
 
-    def __init__(self):
+    def __init__(self, world):
         self.clients = []
+        self.world = world
 
     def from_file(self, path):
         with open(path) as file:
@@ -125,10 +111,10 @@ class Pawns:
                     # verifying the number of clients
                     clients_req = int(words[0])
                 elif len(words) is 6 and words[5] is '0':
-                    aux = Problem(words[0], int(words[1]), int(words[2]), int(words[3]), words[4])
+                    aux = Problem(words[0], int(words[1]), int(words[2]), int(words[3]), words[4], self.world)
                     self.clients.append(aux)
                 elif (len(words) is 8 or 10) and (words[5] is '1' or '2'):
-                    aux = Problem(words[0], int(words[1]), int(words[2]), int(words[3]), words[4])
+                    aux = Problem(words[0], int(words[1]), int(words[2]), int(words[3]), words[4], self.world)
                     aux.make_restriction(words[6], words[7])
                     if words[5] is '2':
                         aux.make_restriction(words[8], words[9])
@@ -139,17 +125,8 @@ class Pawns:
         if clients_req is not len(self.clients):
             return Exception('Wrong file format.')
 
-    def set_world(self,w):
-        self.world = w
-
     def __str__(self):
         res = ''
         for c in self.clients:
             res += str(c) + '\n'
         return res
-
-# testing
-print("\n>> test 1\n")
-clients = Pawns()
-clients.from_file('client_files/client_test.cli')
-print(clients)

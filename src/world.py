@@ -16,10 +16,10 @@ class Timetable:
     def next_trip(self, time):
         i = 0
         while i < len(self.table):
-            if time <= self.table[i]:
-                return [0, self.table[i]]
+            if time[1] <= self.table[i]:
+                return [time[0], self.table[i]]
             i += 1
-        return [1, self.table[0]]
+        return [time[0]+1, self.table[0]]
 
     def __str__(self):
         res = '( '
@@ -62,6 +62,11 @@ class Trip:
 
     def schedule(self):
         return self.__schedule
+
+    def next_available_time(self, time):
+        next_trip = self.__schedule.next_trip(time)
+        duration = [math.floor(self.__duration / 1440),self.__duration % 1440]
+        return next_trip + duration
 
     def __str__(self):
         res = self.__destination + ' ' + self.__type + ' ' + self.__duration + ' ' + self.__cost + ' ' + str(self.__schedule)
@@ -123,6 +128,8 @@ class World:
                 res += trip.__str__() + '\n'
         return res
 
+
+
 # testing
 earth = World()
 earth.from_file('map_files/test_0.map')
@@ -152,4 +159,5 @@ for trip in list3:
 print("\n>> test 6\n")
 scdl = Timetable(0, 1000, 200)
 print(scdl)
-print(scdl.next_trip(1001))
+print(scdl.next_trip([4,1001]))
+
