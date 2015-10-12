@@ -144,6 +144,7 @@ class Pawns:
          return result
 
     def from_file(self, path):
+        self.file_name , garbage = path.split('.')
         with open(path) as file:
             # from now on treat object as variable file.
             for line in file:
@@ -166,6 +167,14 @@ class Pawns:
                     return Exception('Wrong file format.')
         if clients_req is not len(self.clients):
             return Exception('Wrong file format.')
+
+    def to_file(self, bulk):
+        with open(self.file_name + '.solx', "w") as file:
+            for i in range(len(bulk)):
+                p = self.clients[i]
+                aux = p.writeActions(bulk[i]) + '\n'
+                file.write(aux)
+            file.close()
 
     def __str__(self):
         res = ''
