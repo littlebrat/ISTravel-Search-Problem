@@ -1,10 +1,10 @@
+import math
 
 
 class Timetable:
     """
     Class that describes the schedule for a specific trip.
     """
-
 
     def __init__(self, ti, tf, p):
         self.table = []
@@ -16,16 +16,17 @@ class Timetable:
     def next_trip(self, time):
         i = 0
         while i < len(self.table):
-            if time <= self.table[i]:
-                return (0, self.table[i])
+            if time[1] <= self.table[i]:
+                return [time[0], self.table[i]]
             i += 1
-        return (1, self.table[0])
+        return [time[0]+1, self.table[0]]
 
     def __str__(self):
         res = '( '
         for x in self.table:
             res += str(x) + ' '
         return res + ')'
+
 
 class Trip:
     """
@@ -62,6 +63,12 @@ class Trip:
     def schedule(self):
         return self.__schedule
 
+    def next_available_time(self, time):
+        next_trip = self.__schedule.next_trip(time)
+        minutes = (next_trip[1]+ int(self.__duration)) % 1440
+        days = next_trip[0] + math.floor((int(self.__duration)+next_trip[1]) / 1440)
+        return [days,minutes]
+
     def __str__(self):
         res = self.__destination + ' ' + self.__type + ' ' + self.__duration + ' ' + self.__cost + ' ' + str(self.__schedule)
         return res
@@ -97,19 +104,25 @@ class World:
                     # return an exception if we don't find the expected number of words in a line.
                     return Exception('Wrong file format.')
 
-    def trips_from(self,city,type_set = None):
-        # receives a current city and an optional argument referring to the possible means of transportation (this argument has a structure of a set)
-        trips = self.__graph[city]
+    def trips_from(self, city, type_set = None, max_cost = None, max_dur = None):
+        # receives a current city and an optional argument referring to the impossible means
+        #  of transportation (this argument has a structure of a set)
+        trips = self.connections(int(city))
         # if there is no preference return all edges.
         if type_set is None:
-            return trips
-        # otherwise check for all the possible edges.
-        else:
-            res = []
-            for t in trips:
-                if t.type() in type_set:
-                    res.append(t)
-            return res
+            type_set = ''
+        if max_cost is None:
+            max_cost = math.inf
+        if max_dur is None:
+            max_dur = math.inf
+        res = []
+        for t in trips:
+            if t.type() != type_set and max_cost >= int(t.cost()) and max_dur >= int(t.duration()):
+                res.append(t)
+        return res
+
+    def connections(self,node):
+        return self.__graph[node]
 
     def __str__(self):
         res = ''
@@ -119,6 +132,8 @@ class World:
                 res += trip.__str__() + '\n'
         return res
 
+
+"""
 # testing
 earth = World()
 earth.from_file('map_files/test_0.map')
@@ -126,18 +141,27 @@ print("\n>> test 1\n")
 print(earth)
 
 print("\n>> test 2\n")
-for trip in earth.trips_from(9):
+list2 = earth.trips_from(9)
+for trip in list2:
     print(trip)
 
 print("\n>> test 3\n")
-for trip in earth.trips_from(9,set(['comboio'])):
+list3 = earth.trips_from(9,'comboio')
+for trip in list3:
     print(trip)
 
 print("\n>> test 4\n")
-for trip in earth.trips_from(9,set(['comboio','barco'])):
+list3 = earth.trips_from(9,'comboio',8)
+for trip in list3:
     print(trip)
 
 print("\n>> test 5\n")
+list3 = earth.trips_from(9,'comboio',None,25)
+for trip in list3:
+    print(trip)
+
+print("\n>> test 6\n")
 scdl = Timetable(0, 1000, 200)
 print(scdl)
-print(scdl.next_trip(1001))
+print(scdl.next_trip([4,1001]))
+"""
