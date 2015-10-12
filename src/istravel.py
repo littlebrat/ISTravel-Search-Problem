@@ -29,12 +29,12 @@ i=1
 for c in clients:
     print('>> client: '+str(i))
     i += 1
-    first = SearchAgent()
-    plan = first.uniformCostSearch(c)
-    res = ''
-    for s in plan:
-        res += str(s)+' '
-    print(res)
-    print('\n')
-    exit()
+    if i != 4:
+        first = SearchAgent()
+        plan = first.uniformCostSearch(c)
+        res = ''
+        for s in plan:
+            res += str(s)+' '
+        print(res)
+        print('\n')
 

@@ -96,7 +96,7 @@ class Problem():
         """
         res = 0
         for s in actions:
-            res += s.cost()
+            res += int(s.cost())
         return res
 
     def __str__(self):
