@@ -107,7 +107,7 @@ class World:
     def trips_from(self, city, type_set = None, max_cost = None, max_dur = None):
         # receives a current city and an optional argument referring to the impossible means
         #  of transportation (this argument has a structure of a set)
-        trips = self.__graph[city]
+        trips = self.connections(int(city))
         # if there is no preference return all edges.
         if type_set is None:
             type_set = ''
@@ -121,6 +121,9 @@ class World:
                 res.append(t)
         return res
 
+    def connections(self,node):
+        return self.__graph[node]
+
     def __str__(self):
         res = ''
         for key in sorted(self.__graph.keys()):
@@ -130,7 +133,7 @@ class World:
         return res
 
 
-
+"""
 # testing
 earth = World()
 earth.from_file('map_files/test_0.map')
@@ -161,4 +164,4 @@ print("\n>> test 6\n")
 scdl = Timetable(0, 1000, 200)
 print(scdl)
 print(scdl.next_trip([4,1001]))
-
+"""

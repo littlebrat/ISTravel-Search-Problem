@@ -87,7 +87,8 @@ class Problem():
         """
         This method returns the duration of the plan
         """
-        return actions[-1].available()
+        total_time = actions[-1].available()[0]*1440+actions[-1].available()[1]-self.available_time
+        return total_time
 
     def getPlanCost(self,actions):
         """
