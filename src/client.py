@@ -99,6 +99,21 @@ class Problem():
             res += int(s.cost())
         return res
 
+    def writeActions(self, actions):
+        res = str(self.client_id) + ' '
+        if actions is None:
+            res += str(-1)
+        else:
+            for i in range(len(actions)):
+                state = actions[i]
+                if i == 0:
+                    res += str(state.arrives()) + ' '
+                else:
+                    res += state.transport() + ' ' + state.arrives() + ' '
+            res += str(self.getPlanDuration(actions)) + ' ' + str(self.getPlanCost(actions))
+        return res
+
+
     def __str__(self):
         res = "{id: " + str(self.client_id) + ', start: ' + str(self.start_node) + ', goal: ' \
               + str(self.goal_node) + ', available at: ' + str(self.available_time) \

@@ -1,5 +1,5 @@
 from src.world import World
-from src.client import Pawns
+from src.client import Pawns, Problem
 from src.search import SearchAgent
 
 earth = World()
@@ -32,9 +32,4 @@ for c in clients:
     if i != 4:
         first = SearchAgent()
         plan = first.uniformCostSearch(c)
-        res = ''
-        for s in plan:
-            res += str(s)+' '
-        print(res)
-        print('\n')
-
+        print(c.writeActions(plan))
