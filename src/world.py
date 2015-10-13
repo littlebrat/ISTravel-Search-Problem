@@ -41,12 +41,13 @@ class Trip:
         8) period of the trip
     """
 
-    def __init__(self, dest, ty, dur, c, ti, tf, p):
+    def __init__(self, dest, ty, dur, c, ti, tf, p, id):
         self.__destination = dest
         self.__type = ty
         self.__duration = dur
         self.__cost = c
         self.__schedule = Timetable(int(ti), int(tf), int(p))
+        self.__connection_id = id
 
     def destination(self):
         return self.__destination
@@ -63,6 +64,9 @@ class Trip:
     def schedule(self):
         return self.__schedule
 
+    def edge_id(self):
+        return self.__connection_id
+
     def next_available_time(self, time):
         next_trip = self.__schedule.next_trip(time)
         minutes = (next_trip[1]+ int(self.__duration)) % 1440
@@ -78,6 +82,7 @@ class World:
     """
     This class defines the world for the search problem on a graph like structure - a dictionary
     """
+    edge_ids = 0
 
     def __init__(self):
         self.__graph = {}
@@ -96,10 +101,11 @@ class World:
                         self.__graph[x] = []
                 elif len(words) is 8:
                     # if we are on another line of the file with 8 words add edge to the graph. Graph is symmetrical so we add one edge to the inverse connection.
-                    aux = Trip(words[1],words[2],words[3],words[4],words[5],words[6],words[7])
+                    aux = Trip(words[1],words[2],words[3],words[4],words[5],words[6],words[7],self.edge_ids)
                     self.__graph[int(words[0])].append(aux)
-                    auxreturn = Trip(words[0],words[2],words[3],words[4],words[5],words[6],words[7])
+                    auxreturn = Trip(words[0],words[2],words[3],words[4],words[5],words[6],words[7],self.edge_ids)
                     self.__graph[int(words[1])].append(auxreturn)
+                    self.edge_ids += 1
                 else:
                     # return an exception if we don't find the expected number of words in a line.
                     return Exception('Wrong file format.')

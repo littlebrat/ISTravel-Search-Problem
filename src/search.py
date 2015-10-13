@@ -7,7 +7,7 @@ class SearchAgent:
 
     def uniformCostSearch(self, problem):
         """Search the node of least total cost first."""
-        #closed = set()
+        closed = set()
         fringe = PriorityQueue()
         fringe.push([problem.getStartState()],problem.getCostOfActions([problem.getStartState()]))
         while True:
@@ -16,13 +16,13 @@ class SearchAgent:
             v = fringe.pop()
             if problem.isGoalState(v[-1]):
                 return v
-            #if v[0] not in closed:
-                #closed.add(v[0])
-            # put everything tabbed if we used closed sets
-            for child in problem.getSuccessors(v[-1]):
-                aux = v + [child]
-                if problem.isPlanValid(aux):
-                    fringe.push(aux, problem.getCostOfActions(aux))
+            if v[-1].get_id() not in closed:
+                closed.add(v[-1].get_id())
+                # put everything tabbed if we used closed sets
+                for child in problem.getSuccessors(v[-1]):
+                    aux = v + [child]
+                    if problem.isPlanValid(aux):
+                        fringe.push(aux, problem.getCostOfActions(aux))
 
     def aStarSearch(self, problem, heuristic=0):
         """Search the node that has the lowest combined cost and heuristic first."""
