@@ -97,7 +97,7 @@ class World:
                 if len(words) is 2:
                     # if we are on the first line of the file, declare the structure of the dictionary.
                     cities = int(words[0])
-                    for x in range(1,cities):
+                    for x in range(1, cities+1):
                         self.__graph[x] = []
                 elif len(words) is 8:
                     # if we are on another line of the file with 8 words add edge to the graph. Graph is symmetrical so we add one edge to the inverse connection.

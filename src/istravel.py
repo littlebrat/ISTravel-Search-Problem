@@ -3,10 +3,10 @@ from src.client import Pawns
 from src.search import SearchAgent
 
 earth = World()
-earth.from_file('map_files/test_0.map')
+earth.from_file('traveltests/input50.map')
 
 clients = Pawns(earth)
-clients.from_file('client_files/client_test.cli')
+clients.from_file('traveltests/input50.cli')
 
 print('>>>  RUN SEARCH')
 i=1
