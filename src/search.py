@@ -21,7 +21,8 @@ class SearchAgent:
             # put everything tabbed if we used closed sets
             for child in problem.getSuccessors(v[-1]):
                 aux = v + [child]
-                fringe.push(aux, problem.getCostOfActions(aux))
+                if problem.isPlanValid(aux):
+                    fringe.push(aux, problem.getCostOfActions(aux))
 
     def aStarSearch(self, problem, heuristic=0):
         """Search the node that has the lowest combined cost and heuristic first."""

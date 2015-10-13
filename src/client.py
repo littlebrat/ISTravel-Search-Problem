@@ -1,9 +1,8 @@
 from src.state import State
-from src.world import Trip
 import math
 
 
-class Problem():
+class Problem:
 
     def __init__(self, idn, start, goal, available, criteria, world):
         self.client_id = idn
@@ -98,6 +97,12 @@ class Problem():
         for s in actions:
             res += int(s.cost())
         return res
+
+    def isPlanValid(self, actions):
+        if self.getPlanCost(actions) <= self.maximum_plan_cost and self.getPlanDuration(actions) <= self.maximum_plan_duration:
+            return True
+        else:
+            return False
 
     def writeActions(self, actions):
         res = str(self.client_id) + ' '
