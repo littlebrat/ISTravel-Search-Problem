@@ -45,7 +45,7 @@ class Problem:
         """
         Returns the start state for the search problem.
         """
-        return State(math.inf, self.start_node, None, [math.floor(self.available_time / 1440),self.available_time % 1440], 0)
+        return State(math.inf, self.start_node, None, [math.floor(self.available_time / 1440),self.available_time % 1440], 0, -1)
 
 
     def isGoalState(self, state):
@@ -67,7 +67,7 @@ class Problem:
         trips = self.world.trips_from(state.arrives(), self.unwanted_ride, self.maximum_ride_cost, self.maximum_ride_duration)
         actions = []
         for t in trips:
-            aux = State(state.arrives(), t.destination(), t.type(), t.next_available_time(state.available()), t.cost())
+            aux = State(state.arrives(), t.destination(), t.type(), t.next_available_time(state.available()), t.cost(), t.edge_id())
             actions.append(aux)
         return actions
 
