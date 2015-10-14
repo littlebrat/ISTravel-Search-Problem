@@ -16,8 +16,8 @@ class SearchAgent:
             v = fringe.pop()
             if problem.isGoalState(v[-1]):
                 return v
-            if v[-1].get_id() not in closed:
-                closed.add(v[-1].get_id())
+            if v[-1].arrives() not in closed:
+                closed.add(v[-1].arrives())
                 # put everything tabbed if we used closed sets
                 for child in problem.getSuccessors(v[-1]):
                     aux = v + [child]
