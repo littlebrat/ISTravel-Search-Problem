@@ -69,7 +69,7 @@ class Trip:
 
     def next_available_time(self, time):
         next_trip = self.__schedule.next_trip(time)
-        minutes = (next_trip[1]+ int(self.__duration)) % 1440
+        minutes = (next_trip[1] + int(self.__duration)) % 1440
         days = next_trip[0] + math.floor((int(self.__duration)+next_trip[1]) / 1440)
         return [days,minutes]
 
@@ -137,37 +137,3 @@ class World:
             for trip in self.__graph[key]:
                 res += trip.__str__() + '\n'
         return res
-
-
-"""
-# testing
-earth = World()
-earth.from_file('map_files/test_0.map')
-print("\n>> test 1\n")
-print(earth)
-
-print("\n>> test 2\n")
-list2 = earth.trips_from(9)
-for trip in list2:
-    print(trip)
-
-print("\n>> test 3\n")
-list3 = earth.trips_from(9,'comboio')
-for trip in list3:
-    print(trip)
-
-print("\n>> test 4\n")
-list3 = earth.trips_from(9,'comboio',8)
-for trip in list3:
-    print(trip)
-
-print("\n>> test 5\n")
-list3 = earth.trips_from(9,'comboio',None,25)
-for trip in list3:
-    print(trip)
-
-print("\n>> test 6\n")
-scdl = Timetable(0, 1000, 200)
-print(scdl)
-print(scdl.next_trip([4,1001]))
-"""
