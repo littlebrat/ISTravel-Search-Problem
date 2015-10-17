@@ -1,5 +1,7 @@
 class State:
-
+    """
+    State describes the description
+    """
     def __init__(self, now, transport, timestamp, trip_cost):
         self.__now = now
         self.__transport = transport

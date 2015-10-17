@@ -1,4 +1,4 @@
-from src.trip import Trip
+from src.map.trip import Trip
 
 
 class World:

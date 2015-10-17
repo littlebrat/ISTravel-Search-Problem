@@ -1,5 +1,7 @@
 import math
-from src.time import Timetable
+
+from src.map.time import Timetable
+
 
 class Trip:
     """

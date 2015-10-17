@@ -1,10 +1,17 @@
 import sys
-from src.world import World
-from src.client import Pawns
-from src.search import SearchAgent
+
+from src.map.world import World
+from src.clients.clients import Pawns
+from src.search.search import SearchAgent
 
 
-def main(args, debug=False):
+def main(args):
+
+    if len(args) == 4 and args[3] == '-d':
+        debug = True
+    else:
+        debug = False
+
     # Create the map object for this file
     earth = World()
     earth.from_file(args[1])
@@ -13,6 +20,7 @@ def main(args, debug=False):
     clients = Pawns(earth)
     clients.from_file(args[2])
 
+    #Search Procedure
     if debug is True:
         print('>>>  RUN SEARCH')
         i = 1
@@ -29,4 +37,4 @@ def main(args, debug=False):
     clients.to_file(towrite)
 
 if __name__ == "__main__":
-    main(sys.argv, True)
+    main(sys.argv)
