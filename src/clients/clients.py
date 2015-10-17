@@ -45,7 +45,7 @@ class Pawns:
             return Exception('Wrong file format.')
 
     def to_file(self, bulk):
-        with open(self.file_name + '.solx', "w") as file:
+        with open(self.file_name + '.sol', "w") as file:
             for i in range(len(bulk)):
                 p = self.clients[i]
                 aux = p.writeActions(bulk[i]) + '\n'
