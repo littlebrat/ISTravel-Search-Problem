@@ -7,6 +7,7 @@ from src.search.search import SearchAgent
 
 def main(args):
 
+    # Check arguments inserted on the command line
     if len(args) == 4 and args[3] == '-d':
         debug = True
     else:
@@ -26,14 +27,18 @@ def main(args):
         i = 1
     towrite = []
     for c in clients:
+
+        ### Uniform Cost Search Algorithm ###
+        plan = SearchAgent.uniformCostSearch(c)
+        towrite.append(plan)
+
+        ### For debugging on terminal only ###
         if debug is True:
             print('>> client: '+str(i))
             i += 1
-        first = SearchAgent()
-        plan = first.uniformCostSearch(c)
-        if debug is True:
             print(c.writeActions(plan))
-        towrite.append(plan)
+
+    # Write result to file
     clients.to_file(towrite)
 
 if __name__ == "__main__":

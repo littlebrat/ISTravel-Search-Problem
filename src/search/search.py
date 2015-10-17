@@ -2,14 +2,21 @@ from src.utils.util import PriorityQueue
 
 
 class SearchAgent:
+    """
+    Search algorithms to be used with the problems.
+    """
     def __init__(self):
         self.data = None
 
-    def uniformCostSearch(self, problem):
-        """Search the node of least total cost first."""
+
+    @staticmethod
+    def uniformCostSearch(problem,heuristic=0):
+        """
+        This search algorithm can be used for Uniform Cost Search or A* depending on the given heuristic function.
+        """
         closed = set()
         fringe = PriorityQueue()
-        fringe.push([problem.getStartState()],problem.getCostOfActions([problem.getStartState()]))
+        fringe.push([problem.getStartState()],problem.getCostOfActions([problem.getStartState()]) + heuristic)
         while True:
             if fringe.isEmpty():
                 return None
@@ -22,21 +29,4 @@ class SearchAgent:
                 for child in problem.getSuccessors(v[-1]):
                     aux = v + [child]
                     if problem.isPlanValid(aux):
-                        fringe.push(aux, problem.getCostOfActions(aux))
-
-    def aStarSearch(self, problem, heuristic=0):
-        """Search the node that has the lowest combined cost and heuristic first."""
-        closed = set()
-        fringe = PriorityQueue()
-        fringe.push([problem.getStartState(),[]],problem.getCostOfActions([])+heuristic(problem.getStartState(),problem))
-        while True:
-            if fringe.isEmpty():
-                return None
-            v = fringe.pop()
-            if problem.isGoalState(v[0]):
-                return v[1]
-            if v[0] not in closed:
-                closed.add(v[0])
-                for child in problem.getSuccessors(v[0]):
-                    way = v[1]+[child[1]]
-                    fringe.push([child[0],way],problem.getCostOfActions(way)+heuristic(child[0],problem))
+                        fringe.push(aux, problem.getCostOfActions(aux)+heuristic)

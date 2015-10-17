@@ -1,7 +1,13 @@
 class State:
     """
-    State describes the description
+    State describes the formulation used for this state in particular.
+    A state is composed by:
+        - a current node;
+        - transport used to get here.
+        - time that actor is available to travel.
+        - monetary cost of the last trip.
     """
+
     def __init__(self, now, transport, timestamp, trip_cost):
         self.__now = now
         self.__transport = transport
