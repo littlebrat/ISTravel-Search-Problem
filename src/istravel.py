@@ -1,8 +1,8 @@
 import sys
 
-from src.map.world import World
-from src.clients.clients import Pawns
-from src.search.search import SearchAgent
+from map.world import World
+from clients.clients import Pawns
+from search.search import SearchAgent
 
 
 def main(args):

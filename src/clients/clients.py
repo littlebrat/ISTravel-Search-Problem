@@ -1,4 +1,4 @@
-from src.search.problem import Problem
+from search.problem import Problem
 
 
 class Pawns:

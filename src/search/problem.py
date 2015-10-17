@@ -1,6 +1,6 @@
 import math
 
-from src.search.state import State
+from search.state import State
 
 
 class Problem:
