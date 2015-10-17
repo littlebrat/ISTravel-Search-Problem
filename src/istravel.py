@@ -6,20 +6,39 @@ from src.search.search import SearchAgent
 
 
 def main(args):
+    # Dictionary for choosing the desired algorithm
+    algorithm = {'-dfs': SearchAgent.depth_first_search, '-bfs': SearchAgent.breadth_first_search,
+                 '-ucs': SearchAgent.uniformCostSearch
+                 }
+
+    # If no algorithm is chosen, always go with uniform cost search
+    desired_alg = SearchAgent.uniformCostSearch
+
+    # Debug mode is always off, if nothing more is said
+    debug = False
 
     # Check arguments inserted on the command line
-    if len(args) == 4 and args[3] == '-d':
-        debug = True
-    else:
-        debug = False
+    if len(args) >= 4:
+        modes = args[3:len(args)]
+        for m in modes:
+            if m == '-d':
+                debug = True
+            elif m in algorithm.keys():
+                desired_alg = algorithm[m]
 
     # Create the map object for this file
-    earth = World()
-    earth.from_file(args[1])
+    try:
+        earth = World()
+        earth.from_file(args[1])
+    except FileNotFoundError:
+        print(".map file does not exist.")
 
     # Create the client requests object for this file
-    clients = Pawns(earth)
-    clients.from_file(args[2])
+    try:
+        clients = Pawns(earth)
+        clients.from_file(args[2])
+    except FileNotFoundError:
+        print(".cli file does not exist.")
 
     #Search Procedure
     if debug is True:
@@ -28,11 +47,11 @@ def main(args):
     towrite = []
     for c in clients:
 
-        ### Uniform Cost Search Algorithm ###
-        plan = SearchAgent.uniformCostSearch(c)
+        # Search algorithm
+        plan = desired_alg(c)
         towrite.append(plan)
 
-        ### For debugging on terminal only ###
+        # For debugging on terminal only
         if debug is True:
             print('>> client: '+str(i))
             i += 1
