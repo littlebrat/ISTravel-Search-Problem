@@ -102,6 +102,9 @@ class Problem:
         return res
 
     def isPlanValid(self, actions):
+        """
+        This method checks if the plan laid out is valid accordingly to the Bx restrictions
+        """
         if self.getPlanCost(actions) <= self.maximum_plan_cost and self.getPlanDuration(actions) <= self.maximum_plan_duration:
             return True
         else:
