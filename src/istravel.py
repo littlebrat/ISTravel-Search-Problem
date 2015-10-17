@@ -4,7 +4,7 @@ from src.client import Pawns
 from src.search import SearchAgent
 
 
-def main(args, debug = False):
+def main(args, debug=False):
     # Create the map object for this file
     earth = World()
     earth.from_file(args[1])
@@ -15,7 +15,7 @@ def main(args, debug = False):
 
     if debug is True:
         print('>>>  RUN SEARCH')
-        i=1
+        i = 1
     towrite = []
     for c in clients:
         if debug is True:
@@ -29,4 +29,4 @@ def main(args, debug = False):
     clients.to_file(towrite)
 
 if __name__ == "__main__":
-    main(sys.argv,True)
+    main(sys.argv, True)
