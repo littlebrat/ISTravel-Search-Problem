@@ -83,7 +83,7 @@ class SearchAgent:
         """
         closed = set()
         fringe = PriorityQueue()
-        fringe.push([problem.getStartState()],problem.getCostOfActions([problem.getStartState()]) + problem.get_heuristic(problem.start_node,problem.goal_node))
+        fringe.push([problem.getStartState()],problem.getCostOfActions([problem.getStartState()]) + problem.get_heuristic(problem.start_node-1,problem.goal_node-1))
         while True:
             if fringe.isEmpty():
                 return None
@@ -96,4 +96,4 @@ class SearchAgent:
                 for child in problem.getSuccessors(v[-1]):
                     aux = v + [child]
                     if problem.isPlanValid(aux):
-                        fringe.push(aux, problem.getCostOfActions(aux) + problem.get_heuristic(v[-1].arrives(),child.arrives()))
+                        fringe.push(aux, problem.getCostOfActions(aux) + problem.get_heuristic(int(v[-1].arrives())-1,int(child.arrives())-1))
