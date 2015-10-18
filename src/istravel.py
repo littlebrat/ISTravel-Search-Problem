@@ -8,7 +8,7 @@ from src.search.search import SearchAgent
 def main(args):
     # Dictionary for choosing the desired algorithm
     algorithm = {'-dfs': SearchAgent.depth_first_search, '-bfs': SearchAgent.breadth_first_search,
-                 '-ucs': SearchAgent.uniformCostSearch
+                 '-ucs': SearchAgent.uniformCostSearch, '-astar': SearchAgent.aStarSearch
                  }
 
     # If no algorithm is chosen, always go with uniform cost search
@@ -30,6 +30,7 @@ def main(args):
     try:
         earth = World()
         earth.from_file(args[1])
+
     except FileNotFoundError:
         print(".map file does not exist.")
 

@@ -1,5 +1,5 @@
 from src.search.problem import Problem
-
+from src.search.heuristics import Heuristic
 
 class Pawns:
 
@@ -7,6 +7,10 @@ class Pawns:
         self.clients = []
         self.world = world
         self.index = 0
+        self.local_cost_min = world.get_min_cost_matrix()
+        self.local_cost_min = Heuristic.make_optimal(self.local_cost_min)
+        self.local_dur_min = world.get_min_time_matrix()
+        self.local_dur_min = Heuristic.make_optimal(self.local_dur_min)
 
     def __iter__(self):
         return self
@@ -30,10 +34,16 @@ class Pawns:
                     # verifying the number of clients
                     clients_req = int(words[0])
                 elif len(words) is 6 and words[5] is '0':
-                    aux = Problem(words[0], int(words[1]), int(words[2]), int(words[3]), words[4], self.world)
+                    if words[4] == 'tempo':
+                        aux = Problem(words[0], int(words[1]), int(words[2]), int(words[3]), words[4], self.world, self.local_dur_min)
+                    elif words[4] == 'custo':
+                        aux = Problem(words[0], int(words[1]), int(words[2]), int(words[3]), words[4], self.world, self.local_cost_min)
                     self.clients.append(aux)
                 elif (len(words) is 8 or 10) and (words[5] is '1' or '2'):
-                    aux = Problem(words[0], int(words[1]), int(words[2]), int(words[3]), words[4], self.world)
+                    if words[4] == 'tempo':
+                        aux = Problem(words[0], int(words[1]), int(words[2]), int(words[3]), words[4], self.world, self.local_dur_min)
+                    elif words[4] == 'custo':
+                        aux = Problem(words[0], int(words[1]), int(words[2]), int(words[3]), words[4], self.world, self.local_cost_min)
                     aux.make_restriction(words[6], words[7])
                     if words[5] is '2':
                         aux.make_restriction(words[8], words[9])

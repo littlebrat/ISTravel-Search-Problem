@@ -1,4 +1,5 @@
 from src.map.trip import Trip
+import numpy
 
 
 class World:
@@ -7,6 +8,7 @@ class World:
     """
 
     def __init__(self):
+        self.__size = 0
         self.__graph = {}
 
     def from_file(self, path):
@@ -19,6 +21,7 @@ class World:
                 if len(words) is 2:
                     # if we are on the first line of the file, declare the structure of the dictionary.
                     cities = int(words[0])
+                    self.__size = cities
                     for x in range(1, cities+1):
                         self.__graph[x] = []
                 elif len(words) is 8:
@@ -47,6 +50,24 @@ class World:
             if t.type() != type_set and max_cost >= int(t.cost()) and max_dur >= int(t.duration()):
                 res.append(t)
         return res
+
+    def get_min_time_matrix(self):
+        min_matrix = numpy.empty((self.__size,self.__size,))
+        min_matrix[:] = float('inf')
+        for city in self.__graph.keys():
+            for t in self.__graph[city]:
+                if int(t.duration()) < min_matrix[int(city)-1, int(t.destination())-1]:
+                    min_matrix[int(city)-1, int(t.destination())-1] = int(t.duration())
+        return min_matrix
+
+    def get_min_cost_matrix(self):
+        min_matrix = numpy.empty((self.__size,self.__size,))
+        min_matrix[:] = float('inf')
+        for city in self.__graph.keys():
+            for t in self.__graph[city]:
+                if int(t.cost()) < min_matrix[int(city)-1, int(t.destination())-1]:
+                    min_matrix[int(city)-1, int(t.destination())-1] = int(t.cost())
+        return min_matrix
 
     def connections(self,node):
         return self.__graph[node]

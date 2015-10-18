@@ -5,7 +5,7 @@ from src.search.state import State
 
 class Problem:
 
-    def __init__(self, idn, start, goal, available, criteria, world):
+    def __init__(self, idn, start, goal, available, criteria, world, heuristic):
         self.client_id = idn
         self.start_node = start
         self.goal_node = goal
@@ -17,6 +17,7 @@ class Problem:
         self.maximum_plan_cost = float("inf")
         self.maximum_plan_duration = float("inf")
         self.world = world
+        self.heuristic = heuristic
 
     def client_id(self):
         return self.client_id
@@ -61,10 +62,11 @@ class Problem:
 
     def getSuccessors(self, state):
         """
-        For a given state, this should return a list of triples, (successor,
-        action, stepCost), where 'successor' is a successor to the current
-        state, 'action' is the action required to get there, and 'stepCost' is
-        the incremental cost of expanding to that successor.
+        For a given state, this should return a list of states, (successor, transport
+        time available, trip cost), where 'successor' is a successor to the current
+        state, 'transport' is the transport required to get there, 'time available' is the
+        time the actor is available to travel, and 'trip cost' is the incremental cost of
+        expanding to that successor.
         """
         trips = self.world.trips_from(state.arrives(), self.unwanted_ride, self.maximum_ride_cost,
                                       self.maximum_ride_duration)
@@ -109,6 +111,9 @@ class Problem:
             return True
         else:
             return False
+
+    def get_heuristic(self, i, j):
+        return self.heuristic.get_heuristic(i, j)
 
     def writeActions(self, actions):
         res = str(self.client_id) + ' '
