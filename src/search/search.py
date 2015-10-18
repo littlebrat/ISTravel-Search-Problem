@@ -1,4 +1,4 @@
-from src.utils.util import PriorityQueue,Stack,Queue
+from utils.util import PriorityQueue,Stack,Queue
 
 
 class SearchAgent:

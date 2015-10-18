@@ -1,6 +1,6 @@
 import math
 
-from src.map.time import Timetable
+from map.time import Timetable
 
 
 class Trip:

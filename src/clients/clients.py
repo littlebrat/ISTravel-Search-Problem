@@ -1,5 +1,5 @@
-from src.search.problem import Problem
-from src.search.heuristics import Heuristic
+from search.problem import Problem
+from search.heuristics import Heuristic
 
 class Pawns:
 
