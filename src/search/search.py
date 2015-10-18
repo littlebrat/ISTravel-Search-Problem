@@ -14,8 +14,11 @@ class SearchAgent:
         This search algorithm uses the depth first search algorithm for finding a path to its goal.
         Not optimal
         """
-        closed = set()
+        # DOMAIN DEPENDENT PART
         fringe = Stack()
+        # ---------------------
+        # DOMAIN INDEPENDENT PART
+        closed = set()
         fringe.push([problem.getStartState()])
         while True:
             if fringe.isEmpty():
@@ -37,8 +40,11 @@ class SearchAgent:
         This search algorithm uses the breadth first search algorithm for finding a path to its goal.
         Not optimal because it doesn't use a cost for finding the optimal cost.
         """
-        closed = set()
+        # DOMAIN DEPENDENT PART
         fringe = Queue()
+        # ---------------------
+        # DOMAIN INDEPENDENT PART
+        closed = set()
         fringe.push([problem.getStartState()])
         while True:
             if fringe.isEmpty():
@@ -59,8 +65,11 @@ class SearchAgent:
         """
         This search algorithm can be used for Uniform Cost Search or A* depending on the given heuristic function.
         """
-        closed = set()
+        # DOMAIN DEPENDENT PART
         fringe = PriorityQueue()
+        # ---------------------
+        # DOMAIN INDEPENDENT PART
+        closed = set()
         fringe.push([problem.getStartState()],problem.getCostOfActions([problem.getStartState()]))
         while True:
             if fringe.isEmpty():
@@ -81,8 +90,11 @@ class SearchAgent:
         """
         This search algorithm can be used for Uniform Cost Search or A* depending on the given heuristic function.
         """
-        closed = set()
+        # DOMAIN DEPENDENT PART
         fringe = PriorityQueue()
+        # ---------------------
+        # DOMAIN INDEPENDENT PART
+        closed = set()
         fringe.push([problem.getStartState()],problem.getCostOfActions([problem.getStartState()]) + problem.get_heuristic(problem.start_node-1,problem.goal_node-1))
         while True:
             if fringe.isEmpty():
